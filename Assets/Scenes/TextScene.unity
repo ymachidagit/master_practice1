@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 333240555}
   - component: {fileID: 333240554}
   - component: {fileID: 333240553}
+  - component: {fileID: 333240557}
   m_Layer: 0
   m_Name: Window
   m_TagString: Untagged
@@ -321,6 +322,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &333240557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333240552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a73d21bcec3de143ac75b79940e4dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uwcTexture: {fileID: 333240553}
+  windowObject: {fileID: 0}
+  windowTransform: {fileID: 0}
+  windowPos: {x: 0, y: 0, z: 0}
+  windowPxW: 0
+  windowPxH: 0
+  windowScaleW: 0
+  windowScaleH: 0
 --- !u!1 &554044800
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,7 +777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2696d0d9dc6f64c9fb71cb39d3bc7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uwcTexture: {fileID: 333240553}
 --- !u!114 &2039205851
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,3 +1,3 @@
-[uWC::Log][2023-02-07 21:53:53] Start
-[uWC::Err][2023-02-07 21:53:53] WindowTexture::GetPixels() => buffer has not been set yet.
-[uWC::Log][2023-02-07 21:54:36] Stop
+[uWC::Log][2023-02-08 00:04:40] Start
+[uWC::Err][2023-02-08 00:04:41] WindowTexture::GetPixels() => buffer has not been set yet.
+[uWC::Log][2023-02-08 00:05:18] Stop

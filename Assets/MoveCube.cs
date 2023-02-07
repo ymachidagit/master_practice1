@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveCube : MonoBehaviour
 {
-	private float speed = 2.0f;
+	private float speed = 0.5f;
 
 	void Update()
 	{
