@@ -5,99 +5,97 @@ using uWindowCapture;
 
 public class ChangeOutline : MonoBehaviour
 {
-    Color color = new Color(255f / 255f, 0.0f / 255f, 0.0f / 255f, 255f / 255f);
-    Outline outline;
+	Outline outline; // 輪郭
+	Color outlineColor = new Color(255f / 255f, 0.0f / 255f, 0.0f / 255f, 255f / 255f); // 輪郭色
+	Color pixelColor = new Color(255f / 255f, 0.0f / 255f, 0.0f / 255f, 255f / 255f); // 射影の中心のピクセル色
+	Color negaposiColor = new Color(255f / 255f, 0.0f / 255f, 0.0f / 255f, 255f / 255f); // ネガポジ反転後の色
+	Color compColor = new Color(255f / 255f, 0.0f / 255f, 0.0f / 255f, 255f / 255f); // 補色
+	float rgbMax; // 補色計算用 rgbの内最大の値
+	float rgbMin; // 補色計算用 rgbの内最小の値
+	float rgbMaxMin; // 補色計算用 rgbの内最大の値と最小の値の和
+	[SerializeField] UwcWindowTexture uwcTexture;
+	UwcWindow window;
+	GameObject windowObject; // WindowのGameObject
+	Transform windowTransform; // WindowのTransform
+	Vector3 windowPos; // Windowの座標
+	int pixelX; // 射影の中心のピクセル座標（x）
+	int pixelY; // 射影の中心のピクセル座標（y）
+	float windowPxW; // windowのピクセル（幅）
+	float windowPxH; // windowのピクセル（高さ）
+	float windowScaleW; // windowのスケール（幅）
+	float windowScaleH; // windowのスケール（高さ）
+	Transform myTransform; // このオブジェクトのTransform
+	Vector3 myPos; // このオブジェクトの座標
+	Vector3 posInWindow; // このオブジェクトのWindow上の座標
 
-    Color pixelColor = new Color(255f / 255f, 0.0f / 255f, 0.0f / 255f, 255f / 255f);
+	void Start()
+	{
+		outline = gameObject.AddComponent<Outline>();
+		outline.OutlineMode = Outline.Mode.OutlineAll;
+		outline.OutlineColor = outlineColor; // 輪郭の色
+		outline.OutlineWidth = 10f; // 輪郭の幅
 
-    //Renderer WindowRenderer;
+		windowObject = GameObject.Find("Window");
+		windowTransform = windowObject.transform;
+		windowPos = windowTransform.position;
+		windowScaleW = windowTransform.lossyScale.x;
+		windowScaleH = windowTransform.lossyScale.y;
 
-    [SerializeField] UwcWindowTexture uwcTexture;
+		Debug.Log("windowScaleW:" + windowScaleW);
+		Debug.Log("windowScaleH:" + windowScaleH);
+	}
 
-    int pixelX = 0;
-    int pixelY = 0;
+	void Update()
+	{
+		window = uwcTexture.window;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        outline = gameObject.AddComponent<Outline>();
+		myTransform = this.transform;
+		myPos = myTransform.position; // このオブジェクトの座標
+		posInWindow = new Vector3 (myPos.x * windowPos.z / myPos.z, myPos.y * windowPos.z / myPos.z, windowPos.z); // 射影の座標計算
 
-        outline.OutlineMode = Outline.Mode.OutlineAll;
-        outline.OutlineColor = color;
-        outline.OutlineWidth = 10f;
+		windowPxW = window.width; // windowのピクセル（幅）取得
+		windowPxH = window.height; // windowのピクセル（高さ）取得
 
-        //WindowRenderer = GameObject.Find("Window").GetComponent<Renderer>();
+		Debug.Log("windowW:" + windowPxW);
+		Debug.Log("windowH:" + windowPxH);
 
-        Debug.Log("start");
-    }
+		pixelX = (int)(posInWindow.x / (windowScaleW/2) * windowPxW/2 + windowPxW/2); // 射影の中心のピクセル座標（x）計算
+		pixelY = (int)(posInWindow.y / (windowScaleH/2) * windowPxH/2 + windowPxH/2); // 射影の中心のピクセル座標（y）計算
 
-    // Update is called once per frame
-    void Update()
-    {
-        Transform myTransform = this.transform;
-        Vector3 pos = myTransform.position;
+		Debug.Log("pos.x:" + myPos.x);
+		Debug.Log("posInScreen.x:" + posInWindow.x);
+		Debug.Log("pixelX:" + pixelX);
 
-        Vector3 posInScreen = new Vector3(pos.x * 2, pos.y * 2, pos.z * 2);
+		if (window == null)
+		{
+			return;
+		}
+		else
+		{
+			pixelColor = window.GetPixel(pixelX, pixelY); // 射影の中心のピクセル色取得
 
-        //Texture2D tex = WindowRenderer.material.mainTexture as Texture2D;
+			// ネガポジ反転
+			negaposiColor.r = (1.0f - pixelColor.r);
+			negaposiColor.g = (1.0f - pixelColor.g);
+			negaposiColor.b = (1.0f - pixelColor.b);
 
-        //count += 1.0f;
-        //color = new Color(255f / 255f, (0.0f + count) / 255f, 0.0f / 255f, 255f/ 255f);
-        //outline.OutlineColor = color;
+			// 補色の計算
+			rgbMax = pixelColor.r;
+			rgbMin = pixelColor.r;
 
-        //pixelCount += 1;
+			rgbMax = (pixelColor.g > rgbMax) ? pixelColor.g : rgbMax; // gの方が大きい場合g
+			rgbMax = (pixelColor.b > rgbMax) ? pixelColor.b : rgbMax; // bの方が大きい場合b
+			rgbMin = (pixelColor.g < rgbMin) ? pixelColor.g : rgbMin; // gの方が小さい場合g
+			rgbMin = (pixelColor.b < rgbMin) ? pixelColor.b : rgbMin; // bの方が小さい場合b
 
-        var window = uwcTexture.window;
+			rgbMaxMin = rgbMax + rgbMin; // rgbの内最大の値と最小の値の和
 
-        //if (window == null)
-        //{
-        //    return;
-        //}
-        //else
-        //{
-        //    outline.OutlineColor = window.GetPixel(pixelCount, pixelCount);
-        //    //var cursorPos = Lib.GetCursorPosition();
-        //    //var x = cursorPos.x - window.x;
-        //    //var y = cursorPos.y - window.y;
-        //    //material.color = window.GetPixel(x, y);
-        //    //Debug.Log(x);
-
-        pixelX = (int)posInScreen.x + 50;
-        pixelY = (int)posInScreen.y + 50;
-
-        //pixelX *= 2;
-        //pixelY *= 2;
-
-        if (window == null)
-        {
-            return;
-        }
-        else
-        {
-            pixelColor = window.GetPixel(pixelX, pixelY);
-            pixelColor.r = 1.0f;
-            //pixelColor.g = pixelColor.b;
-            //pixelColor.b = 1.0f - pixelColor.b;
-            outline.OutlineColor = pixelColor;
-            //outline.OutlineColor = window.GetPixel(pixelX, pixelY);
-            //var cursorPos = Lib.GetCursorPosition();
-            //var x = cursorPos.x - window.x;
-            //var y = cursorPos.y - window.y;
-            //material.color = window.GetPixel(x, y);
-            //Debug.Log(x);
-        }
-
-        //if (UwcManager.cursorWindow == window)
-        //{
-        //    //material.color = window.GetPixel(1 + pixelCount, 1 + pixelCount);
-
-        //    var cursorPos = Lib.GetCursorPosition();
-        //    var x = cursorPos.x - window.x;
-        //    var y = cursorPos.y - window.y;
-        //    material.color = window.GetPixel(x, y);
-        //    Debug.Log(x);
-        //    Debug.Log(window.GetPixel(x, y));
-
-        //}
-    }
+			compColor.r = (rgbMaxMin - pixelColor.r);
+			compColor.g = (rgbMaxMin - pixelColor.g);
+			compColor.b = (rgbMaxMin - pixelColor.b);
+			
+			// outline.OutlineColor = negaposiColor; // 輪郭色をネガポジ反転色に変更
+			outline.OutlineColor = compColor; // 輪郭色を補色に変更
+		}
+	}
 }
