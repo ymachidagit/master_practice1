@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveCube : MonoBehaviour
 {
-	private float speed = 0.5f;
+	private float speed = 0.8f;
 
 	void Update()
 	{
@@ -13,10 +13,10 @@ public class MoveCube : MonoBehaviour
 
 	void Operation()
 	{
-		if (Input.GetKey (KeyCode.UpArrow)) 
+		if (Input.GetKey (KeyCode.W)) 
 			transform.position += transform.up * speed * Time.deltaTime;
 
-		if (Input.GetKey (KeyCode.DownArrow)) 
+		if (Input.GetKey (KeyCode.S)) 
 			transform.position -= transform.up * speed * Time.deltaTime;
 
 		if (Input.GetKey(KeyCode.D)) 
@@ -25,10 +25,10 @@ public class MoveCube : MonoBehaviour
 		if (Input.GetKey (KeyCode.A)) 
 			transform.position -= transform.right * speed * Time.deltaTime;
 
-		if (Input.GetKey (KeyCode.W)) 
+		if (Input.GetKey (KeyCode.UpArrow)) 
 			transform.position += transform.forward * speed * Time.deltaTime;
 
-		if (Input.GetKey (KeyCode.S)) 
+		if (Input.GetKey (KeyCode.DownArrow)) 
 			transform.position -= transform.forward * speed * Time.deltaTime;
 	}
 }
