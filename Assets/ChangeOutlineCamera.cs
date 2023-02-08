@@ -12,7 +12,7 @@ public class ChangeOutlineCamera : MonoBehaviour
 	int pixelY; // 射影の中心のピクセル座標（y）
 	Transform myTransform; // このオブジェクトのTransform
 	Vector3 myPos; // このオブジェクトの座標
-	Vector3 posInCamView; // このオブジェクトのWindow上の座標
+	Vector3 posInCamView; // このオブジェクトのCamView上の座標
 	GameObject camViewObject; // CamViewのGameObject
 	SetCamView setCamViewScript; // SetCamView.cs
 
@@ -50,6 +50,7 @@ public class ChangeOutlineCamera : MonoBehaviour
 			// outline.OutlineColor = pixelColor;
 			ChangeNegaPosiColor();
 			// ChangeComplementaryColor();
+			// ChangeShade();
 		}
 	}
 	void ChangeNegaPosiColor(){ // ネガポジ反転
@@ -81,5 +82,20 @@ public class ChangeOutlineCamera : MonoBehaviour
 		compColor.b = (rgbMaxMin - pixelColor.b);
 
 		outline.OutlineColor = compColor;
+	}
+	void ChangeShade(){ // 同系統の色の薄い色/濃い色に変換
+
+		Color shadeColor = new Color(0.0f / 255f, 0.0f / 255f, 0.0f / 255f, 255f / 255f); // 変換した色
+
+		float rgbTotal = pixelColor.r + pixelColor.g + pixelColor.b;
+
+		if(rgbTotal >= 1.5){
+			shadeColor = new Color(pixelColor.r -0.5f, pixelColor.g -0.5f, pixelColor.b -0.5f);
+		}
+		else{
+			
+			shadeColor = new Color(pixelColor.r + 0.5f, pixelColor.g + 0.5f, pixelColor.b +0.5f);
+		}
+
 	}
 }
