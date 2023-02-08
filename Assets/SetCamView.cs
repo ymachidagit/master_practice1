@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SetCamView : MonoBehaviour
 {
-	int width = 1200;
-	int height = 720;
-	int fps = 60;
+	// int width = 1200;
+	// int height = 720;
+	// int fps = 60;
 	public WebCamTexture webcamTexture;
 	public GameObject camViewObject; // CamViewのGameObject
 	public Transform camViewTransform; // CamViewのTransform
@@ -18,7 +18,10 @@ public class SetCamView : MonoBehaviour
 	void Start () 
 	{
 		WebCamDevice[] devices = WebCamTexture.devices;
-		webcamTexture = new WebCamTexture(devices[0].name, this.width, this.height, this.fps);
+		for(int i = 0 ; i <= devices.Length ; i++){
+			Debug.Log("デバイス:" + devices[i]);
+		}
+		webcamTexture = new WebCamTexture(devices[0].name);
 		GetComponent<Renderer> ().material.mainTexture = webcamTexture;
 		webcamTexture.Play();
 
