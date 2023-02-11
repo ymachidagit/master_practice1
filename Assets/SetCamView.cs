@@ -18,9 +18,9 @@ public class SetCamView : MonoBehaviour
 	void Start () 
 	{
 		WebCamDevice[] devices = WebCamTexture.devices;
-		for(int i = 0 ; i <= devices.Length ; i++){
-			Debug.Log("デバイス:" + devices[i]);
-		}
+		// for(int i = 0 ; i <= devices.Length ; i++){
+		// 	Debug.Log("デバイス:" + devices[i]);
+		// }
 		webcamTexture = new WebCamTexture(devices[0].name);
 		GetComponent<Renderer> ().material.mainTexture = webcamTexture;
 		webcamTexture.Play();
