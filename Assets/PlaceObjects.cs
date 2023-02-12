@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class PlaceObjects : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public GameObject SpherePrefab;
+	public GameObject CubePrefab;
+	public GameObject CylinderPrefab;
+	public GameObject ConePrefab;
+	Color colorRed = Color.red;
+	Color colorBlue = Color.blue;
+	Color colorGreen = Color.green;
+	Color colorYellow = Color.yellow;
+	Color colorPurple = new Color(1, 0, 1, 1);
+	GameObject[] objects = new GameObject[20];
+	void Start()
+	{
+		for(int i = 0 ; i < objects.Length ; i ++){
+			
+		}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+	}
+
+	void Update()
+	{
+
+	}
 }
