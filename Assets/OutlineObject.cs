@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using uWindowCapture;
 
-public class ChangeOutlineCamera : MonoBehaviour
+public class OutlineObject : MonoBehaviour
 {
 	Outline outline; // 輪郭
 	Color outlineColor; // 輪郭色

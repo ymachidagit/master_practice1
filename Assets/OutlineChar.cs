@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ChangeTextOutline : MonoBehaviour
+public class OutlineChar : MonoBehaviour
 {
-	TextMeshPro text; // このオブジェクト
+	TextMeshPro character; // このオブジェクト
 	Color pixelColor; // 射影の中心のピクセル色
 	int pixelX; // 射影の中心のピクセル座標（x）
 	int pixelY; // 射影の中心のピクセル座標（y）
@@ -17,9 +17,9 @@ public class ChangeTextOutline : MonoBehaviour
 
 	void Start()
 	{
-		text = this.GetComponent<TextMeshPro>();
-		text.outlineColor = new Color(0.0f / 255f, 1.0f / 255f, 0.0f / 255f, 255f / 255f); // 輪郭色
-		text.outlineWidth = 0.2f; // 輪郭の幅（0 ~ 1）
+		character = this.GetComponent<TextMeshPro>();
+		character.outlineColor = new Color(0.0f / 255f, 1.0f / 255f, 0.0f / 255f, 255f / 255f); // 輪郭色
+		character.outlineWidth = 0.2f; // 輪郭の幅（0 ~ 1）
 
 		camViewObject = GameObject.Find("CamView");
 		setCamViewScript = camViewObject.GetComponent<SetCamView>();
@@ -61,7 +61,7 @@ public class ChangeTextOutline : MonoBehaviour
 		negaposiColor.g = (1.0f - pixelColor.g);
 		negaposiColor.b = (1.0f - pixelColor.b);
 
-		text.outlineColor = negaposiColor;
+		character.outlineColor = negaposiColor;
 	}
 	void ChangeComplementaryColor(){ // 補色の計算
 
@@ -81,7 +81,7 @@ public class ChangeTextOutline : MonoBehaviour
 		compColor.g = (rgbMaxMin - pixelColor.g);
 		compColor.b = (rgbMaxMin - pixelColor.b);
 
-		text.outlineColor = compColor;
+		character.outlineColor = compColor;
 	}
 	void ChangeShade(){ // 同系統の色の薄い色/濃い色に変換
 
@@ -96,6 +96,6 @@ public class ChangeTextOutline : MonoBehaviour
 			
 			shadeColor = new Color(pixelColor.r + 0.5f, pixelColor.g + 0.5f, pixelColor.b +0.5f);
 		}
-		text.outlineColor = shadeColor;
+		character.outlineColor = shadeColor;
 	}
 }
