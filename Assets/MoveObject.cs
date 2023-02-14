@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveCube : MonoBehaviour
+public class MoveObject : MonoBehaviour
 {
 	private float speed = 0.8f;
 

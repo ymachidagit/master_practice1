@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using uWindowCapture;
+using TMPro;
 
-public class ChangeOutlineCamera : MonoBehaviour
+public class ChangeTextOutline : MonoBehaviour
 {
-	Outline outline; // 輪郭
-	Color outlineColor; // 輪郭色
+	TextMeshPro text; // このオブジェクト
 	Color pixelColor; // 射影の中心のピクセル色
 	int pixelX; // 射影の中心のピクセル座標（x）
 	int pixelY; // 射影の中心のピクセル座標（y）
@@ -18,9 +17,9 @@ public class ChangeOutlineCamera : MonoBehaviour
 
 	void Start()
 	{
-		outline = gameObject.AddComponent<Outline>();
-		outline.OutlineMode = Outline.Mode.OutlineAll;
-		outline.OutlineWidth = 20f; // 輪郭の幅
+		text = this.GetComponent<TextMeshPro>();
+		text.outlineColor = new Color(0.0f / 255f, 1.0f / 255f, 0.0f / 255f, 255f / 255f); // 輪郭色
+		text.outlineWidth = 0.2f; // 輪郭の幅（0 ~ 1）
 
 		camViewObject = GameObject.Find("CamView");
 		setCamViewScript = camViewObject.GetComponent<SetCamView>();
@@ -33,8 +32,8 @@ public class ChangeOutlineCamera : MonoBehaviour
 		posInCamView = new Vector3 (myPos.x * setCamViewScript.camViewPos.z / myPos.z, myPos.y * setCamViewScript.camViewPos.z / myPos.z, setCamViewScript.camViewPos.z); // 射影の座標計算
 
 		pixelX = (int)(posInCamView.x / (setCamViewScript.camViewScaleW/2) * setCamViewScript.camViewPxW/2 + setCamViewScript.camViewPxW/2); // 射影の中心のピクセル座標（x）計算
-		pixelY = (int)(posInCamView.y / (setCamViewScript.camViewScaleH/2) * setCamViewScript.camViewPxH/2 + setCamViewScript.camViewPxH/2); // 射影の中心のピクセル座標（y）計算
-		
+		pixelY = (int)(posInCamView.y / (setCamViewScript.camViewScaleH/2) * setCamViewScript.camViewPxH/2 + setCamViewScript.camViewPxH/2 ); // 射影の中心のピクセル座標（y）計算
+
 		Debug.Log("posInCamView:" + posInCamView);
 		Debug.Log("pixelX:" + pixelX);
 		Debug.Log("pixelY:" + pixelY);
@@ -48,7 +47,7 @@ public class ChangeOutlineCamera : MonoBehaviour
 			pixelColor = setCamViewScript.webcamTexture.GetPixel(pixelX, pixelY); // 射影の中心のピクセル色取得
 
 			// 輪郭色変更
-			// outline.OutlineColor = pixelColor;
+			// text.OutlineColor = pixelColor;
 			ChangeNegaPosiColor();
 			// ChangeComplementaryColor();
 			// ChangeShade();
@@ -62,7 +61,7 @@ public class ChangeOutlineCamera : MonoBehaviour
 		negaposiColor.g = (1.0f - pixelColor.g);
 		negaposiColor.b = (1.0f - pixelColor.b);
 
-		outline.OutlineColor = negaposiColor;
+		text.outlineColor = negaposiColor;
 	}
 	void ChangeComplementaryColor(){ // 補色の計算
 
@@ -82,7 +81,7 @@ public class ChangeOutlineCamera : MonoBehaviour
 		compColor.g = (rgbMaxMin - pixelColor.g);
 		compColor.b = (rgbMaxMin - pixelColor.b);
 
-		outline.OutlineColor = compColor;
+		text.outlineColor = compColor;
 	}
 	void ChangeShade(){ // 同系統の色の薄い色/濃い色に変換
 
@@ -97,6 +96,6 @@ public class ChangeOutlineCamera : MonoBehaviour
 			
 			shadeColor = new Color(pixelColor.r + 0.5f, pixelColor.g + 0.5f, pixelColor.b +0.5f);
 		}
-		outline.OutlineColor = shadeColor;
+		text.outlineColor = shadeColor;
 	}
 }
