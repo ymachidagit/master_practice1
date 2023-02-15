@@ -6,6 +6,8 @@ public class RayPixelColor : MonoBehaviour
 {
 	Outline outline; // 輪郭
 	Color pixelColor; // 射影の中心のピクセル色
+	int pixelX; // 射影の中心のピクセル座標（x）
+	int pixelY; // 射影の中心のピクセル座標（y）
 	Transform myTransform; // このオブジェクトのTransform
 	Vector3 myPos; // このオブジェクトの座標
 	GameObject camViewObject; // CamViewのGameObject
@@ -14,6 +16,7 @@ public class RayPixelColor : MonoBehaviour
 	Ray ray; // カメラからオブジェクトへのレイ
 	RaycastHit hit; // レイとcamViewのヒット
 	Vector2 pixelUV; // hitの座標
+	int mask = 1 << 7; // 
 	void Start()
 	{
 		outline = gameObject.AddComponent<Outline>();
@@ -28,15 +31,23 @@ public class RayPixelColor : MonoBehaviour
 		myTransform = this.transform;
 		myPos = myTransform.position; // このオブジェクトの座標
 
-		ray = new Ray(camObject.transform.position, setCamViewScript.camViewTransform.TransformDirection(myPos));
-		// Debug.Log("ray.origin" + ray.origin);
-		// Debug.Log("ray.direction" + ray.direction);
-		if(Physics.Raycast(ray, out hit)){
+		Debug.Log("myPos" + myPos);
+
+		var direction = myPos - camObject.transform.position;
+		Debug.Log("direction" + direction);
+
+		ray = new Ray(camObject.transform.position, direction);
+		Debug.Log("ray.origin" + ray.origin);
+		Debug.Log("ray.direction" + ray.direction);
+		if(Physics.Raycast(ray, out hit, mask)){
 			pixelUV = hit.textureCoord;
+			Debug.Log("pixelUVx" + pixelUV.x);
+			Debug.Log("pixelUVy" + pixelUV.y);
 
 			pixelUV.x *= setCamViewScript.camViewPxW;
 			pixelUV.y *= setCamViewScript.camViewPxH;
-			pixelUV.y = setCamViewScript.camViewPxH - pixelUV.y;
+			pixelUV.x += setCamViewScript.camViewPxW/2;
+			pixelUV.y += setCamViewScript.camViewPxH/2;
 
 			pixelColor = setCamViewScript.webcamTexture.GetPixel((int)pixelUV.x, (int)pixelUV.y); // 射影の中心のピクセル色取得
 			Debug.Log("pixelUVx" + pixelUV.x);
@@ -44,6 +55,7 @@ public class RayPixelColor : MonoBehaviour
 
 			outline.OutlineColor = pixelColor;
 		}
+		Debug.DrawRay(ray.origin, ray.direction, Color.red);
 	}
 	void ChangeNegaPosiColor(){ // ネガポジ反転
 

@@ -48,8 +48,8 @@ public class OutlineObject : MonoBehaviour
 			pixelColor = setCamViewScript.webcamTexture.GetPixel(pixelX, pixelY); // 射影の中心のピクセル色取得
 
 			// 輪郭色変更
-			// outline.OutlineColor = pixelColor;
-			ChangeNegaPosiColor();
+			outline.OutlineColor = pixelColor;
+			// ChangeNegaPosiColor();
 			// ChangeComplementaryColor();
 			// ChangeShade();
 		}
