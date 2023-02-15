@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6854943831945070022}
   - component: {fileID: 6854943831945070023}
   - component: {fileID: 6854943831945070020}
+  - component: {fileID: 4031195544178874873}
   m_Layer: 0
   m_Name: APrefab
   m_TagString: Untagged
@@ -180,8 +181,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6854943831945070021}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7546120bea67c374ea0383d9a1ef0216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4031195544178874873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6854943831945070021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2577929ca6bceab4080cebb15896dd44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camObject: {fileID: 0}
