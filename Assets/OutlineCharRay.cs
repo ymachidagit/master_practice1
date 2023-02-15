@@ -26,6 +26,8 @@ public class OutlineCharRay : MonoBehaviour
 
 		camViewObject = GameObject.Find("CamView");
 		setCamViewScript = camViewObject.GetComponent<SetCamView>();
+        
+        camObject = GameObject.Find("Camera");
 	}
 	void Update()
 	{
