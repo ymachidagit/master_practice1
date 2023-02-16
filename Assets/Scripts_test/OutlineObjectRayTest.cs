@@ -1,21 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using uWindowCapture;
 
-public class OutlineObject : MonoBehaviour
+public class OutlineObjectRayTest : MonoBehaviour
 {
-	Outline outline; // 輪郭
-	Color outlineColor; // 輪郭色
+    Outline outline; // 輪郭
 	Color pixelColor; // 射影の中心のピクセル色
-	int pixelX; // 射影の中心のピクセル座標（x）
-	int pixelY; // 射影の中心のピクセル座標（y）
+	float pixelX; // 射影の中心のピクセル座標（x）
+	float pixelY; // 射影の中心のピクセル座標（y）
 	Transform myTransform; // このオブジェクトのTransform
-	Vector3 myPos; // このオブジェクトの座標
-	Vector3 posInCamView; // このオブジェクトのCamView上の座標
 	GameObject camViewObject; // CamViewのGameObject
 	SetCamView setCamViewScript; // SetCamView.cs
-
+	GameObject camObject; // Cameraオブジェクト
+	Ray ray; // カメラからオブジェクトへのray
+	RaycastHit hit; // rayとcamViewのヒット
+	Vector3 hitWorld; // hitのワールド座標
+	Vector3 hitLocal; // hitのローカル座標
+	Transform camViewTransform; // CamViewのTransform
+	float camViewPxW; // CamViewのピクセル（幅）
+	float camViewPxH; // CamViewのピクセル（高さ）
+	float camViewScaleW; // camViewのスケール（幅）
+	float camViewScaleH; // camViewのスケール（高さ）
+	int mask = 1 << 7; // rayのマスク
 	void Start()
 	{
 		outline = gameObject.AddComponent<Outline>();
@@ -24,35 +30,44 @@ public class OutlineObject : MonoBehaviour
 
 		camViewObject = GameObject.Find("CamView");
 		setCamViewScript = camViewObject.GetComponent<SetCamView>();
+
+		camViewTransform = setCamViewScript.camViewTransform;
+		camViewPxW = setCamViewScript.camViewPxW;
+		camViewPxH = setCamViewScript.camViewPxH;
+		camViewScaleW = setCamViewScript.camViewScaleW;
+		camViewScaleH = setCamViewScript.camViewScaleH;
+
+		camObject = GameObject.Find("Camera");
 	}
 	void Update()
 	{
 		myTransform = this.transform;
-		myPos = myTransform.position; // このオブジェクトの座標
-		
-		posInCamView = new Vector3 (myPos.x * setCamViewScript.camViewPos.z / myPos.z, myPos.y * setCamViewScript.camViewPos.z / myPos.z, setCamViewScript.camViewPos.z); // 射影の座標計算
 
-		pixelX = (int)(posInCamView.x / (setCamViewScript.camViewScaleW/2) * setCamViewScript.camViewPxW/2 + setCamViewScript.camViewPxW/2); // 射影の中心のピクセル座標（x）計算
-		pixelY = (int)(posInCamView.y / (setCamViewScript.camViewScaleH/2) * setCamViewScript.camViewPxH/2 + setCamViewScript.camViewPxH/2); // 射影の中心のピクセル座標（y）計算
-		
-		Debug.Log("posInCamView:" + posInCamView);
-		Debug.Log("pixelX:" + pixelX);
-		Debug.Log("pixelY:" + pixelY);
+		var direction = myTransform.position - camObject.transform.position;
 
-		if (!setCamViewScript.webcamTexture.isPlaying)
-		{
-			return;
-		}
-		else
-		{
-			pixelColor = setCamViewScript.webcamTexture.GetPixel(pixelX, pixelY); // 射影の中心のピクセル色取得
+		ray = new Ray(camObject.transform.position, direction);
+		if(Physics.Raycast(ray, out hit, mask)){
+			hitWorld = hit.point; // hitのワールド座標
+			hitLocal = camObject.transform.InverseTransformPoint(hitWorld); // hitのローカル座標
 
-			// 輪郭色変更
+			// camView上の座標に変換
+			hitLocal.x *= (camViewTransform.localPosition.z / myTransform.localPosition.z);
+			hitLocal.y *= (camViewTransform.localPosition.z / myTransform.localPosition.z);
+
+			// pixel座標を計算
+			pixelX = hitLocal.x / (camViewScaleW/2) * (camViewPxW/2) + (camViewPxW/2); // 射影の中心のピクセル座標（x）計算
+			pixelY = hitLocal.y / (camViewScaleH/2) * (camViewPxH/2) + (camViewPxH/2); // 射影の中心のピクセル座標（y）計算
+
+			pixelColor = setCamViewScript.webcamTexture.GetPixel((int)pixelX, (int)pixelY); // 射影の中心のピクセル色取得
+			// Debug.Log("pixelx" + pixelX + "pixely" + pixelY);
+
+            // 輪郭色変更
 			outline.OutlineColor = pixelColor;
 			// ChangeNegaPosiColor();
 			// ChangeComplementaryColor();
 			// ChangeShade();
 		}
+		Debug.DrawRay(ray.origin, ray.direction, Color.red);
 	}
 	void ChangeNegaPosiColor(){ // ネガポジ反転
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3025404836317012592}
   - component: {fileID: 2329153993834782844}
   - component: {fileID: 5129491523228915947}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BbluePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,4 +198,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2577929ca6bceab4080cebb15896dd44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camObject: {fileID: 0}

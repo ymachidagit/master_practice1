@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class PlaceChar : MonoBehaviour
+public class PlaceCharTest : MonoBehaviour
 {
 	[SerializeField] TextMeshPro AColor1Prefab;
 	[SerializeField] TextMeshPro AColor2Prefab;
 	[SerializeField] TextMeshPro BColor1Prefab;
 	[SerializeField] TextMeshPro BColor2Prefab;
-	TextMeshPro[,] searchObjects = new TextMeshPro[2, 2];
+	TextMeshPro[,] searchObjects = new TextMeshPro[5, 10];
 	GameObject camObject;
 	Transform camTransform;
 	Vector3 camPosition;
 	float angleDiff; // オブジェクト間の角度差（y軸周り．横方向）
 	float angle; // オブジェクトの配置角度
-	float rangeAngle = 20f; // オブジェクト配置範囲（角度）
+	float rangeAngle = 180f; // オブジェクト配置範囲（角度）
 	float radius = 1.0f; // カメラと探索オブジェクトの距離（半径）
 	float distanceY; // オブジェクト間の距離（y軸方向．縦方向）
 	float positionY; // オブジェクトの配置座標（y）
-	float rangeY = 0.2f; // オブジェクトの配置範囲（y座標）
+	float rangeY = 1.6f; // オブジェクトの配置範囲（y座標）
 	
 	void Start()
 	{

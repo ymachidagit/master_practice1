@@ -15,7 +15,7 @@ public class SetCamView : MonoBehaviour
 	public float camViewPxH; // CamViewのピクセル（高さ）
 	public float camViewScaleW; // CamViewのスケール（幅）
 	public float camViewScaleH; // CamViewのスケール（高さ）
-	void Start () 
+	void Awake () 
 	{
 		WebCamDevice[] devices = WebCamTexture.devices;
 		for(int i = 0 ; i < devices.Length ; i++){

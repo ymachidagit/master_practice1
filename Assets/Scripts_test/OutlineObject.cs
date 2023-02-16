@@ -1,70 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using uWindowCapture;
 
-public class OutlineCharRay : MonoBehaviour
+public class OutlineObject : MonoBehaviour
 {
-	TextMeshPro character; // このオブジェクト
+	Outline outline; // 輪郭
+	Color outlineColor; // 輪郭色
 	Color pixelColor; // 射影の中心のピクセル色
 	int pixelX; // 射影の中心のピクセル座標（x）
 	int pixelY; // 射影の中心のピクセル座標（y）
 	Transform myTransform; // このオブジェクトのTransform
 	Vector3 myPos; // このオブジェクトの座標
+	Vector3 posInCamView; // このオブジェクトのCamView上の座標
 	GameObject camViewObject; // CamViewのGameObject
 	SetCamView setCamViewScript; // SetCamView.cs
 	GameObject camObject;
-	Ray ray; // カメラからオブジェクトへのレイ
-	RaycastHit hit; // レイとcamViewのヒット
-	Vector2 pixelUV; // hitの座標
-	int mask = 1 << 7; // 
+
 	void Start()
 	{
-		character = this.GetComponent<TextMeshPro>();
-		character.outlineColor = new Color(0.0f / 255f, 1.0f / 255f, 0.0f / 255f, 255f / 255f); // 輪郭色
-		character.outlineWidth = 0.2f; // 輪郭の幅（0 ~ 1）
+		outline = gameObject.AddComponent<Outline>();
+		outline.OutlineMode = Outline.Mode.OutlineAll;
+		outline.OutlineWidth = 20f; // 輪郭の幅
 
 		camViewObject = GameObject.Find("CamView");
 		setCamViewScript = camViewObject.GetComponent<SetCamView>();
-        
-        camObject = GameObject.Find("Camera");
+
+		camObject = GameObject.Find("Camera");
 	}
 	void Update()
 	{
 		myTransform = this.transform;
 		myPos = myTransform.position; // このオブジェクトの座標
+		
+		posInCamView = new Vector3 (myPos.x * setCamViewScript.camViewPos.z / myPos.z, myPos.y * setCamViewScript.camViewPos.z / myPos.z, setCamViewScript.camViewPos.z); // 射影の座標計算
 
-        myPos.y -= myTransform.lossyScale.y/2;
+		pixelX = (int)(posInCamView.x / (setCamViewScript.camViewScaleW/2) * setCamViewScript.camViewPxW/2 + setCamViewScript.camViewPxW/2); // 射影の中心のピクセル座標（x）計算
+		pixelY = (int)(posInCamView.y / (setCamViewScript.camViewScaleH/2) * setCamViewScript.camViewPxH/2 + setCamViewScript.camViewPxH/2); // 射影の中心のピクセル座標（y）計算
+		
+		Debug.Log("posInCamView:" + posInCamView);
+		Debug.Log("pixelX:" + pixelX);
+		Debug.Log("pixelY:" + pixelY);
 
-		// Debug.Log("myPos" + myPos);
+		if (!setCamViewScript.webcamTexture.isPlaying)
+		{
+			return;
+		}
+		else
+		{
+			pixelColor = setCamViewScript.webcamTexture.GetPixel(pixelX, pixelY); // 射影の中心のピクセル色取得
 
-		var direction = myPos - camObject.transform.position;
-		// Debug.Log("direction" + direction);
-
-		ray = new Ray(camObject.transform.position, direction);
-		// Debug.Log("ray.origin" + ray.origin);
-		// Debug.Log("ray.direction" + ray.direction);
-		if(Physics.Raycast(ray, out hit, mask)){
-			pixelUV = hit.textureCoord;
-			// Debug.Log("pixelUVx" + pixelUV.x);
-			// Debug.Log("pixelUVy" + pixelUV.y);
-
-			pixelUV.x *= setCamViewScript.camViewPxW;
-			pixelUV.y *= setCamViewScript.camViewPxH;
-			pixelUV.x += setCamViewScript.camViewPxW/2;
-			pixelUV.y += setCamViewScript.camViewPxH/2;
-
-			pixelColor = setCamViewScript.webcamTexture.GetPixel((int)pixelUV.x, (int)pixelUV.y); // 射影の中心のピクセル色取得
-			// Debug.Log("pixelUVx" + pixelUV.x);
-			// Debug.Log("pixelUVy" + pixelUV.y);
-            
-            // 輪郭色変更
-			character.outlineColor = pixelColor;
+			// 輪郭色変更
+			outline.OutlineColor = pixelColor;
 			// ChangeNegaPosiColor();
 			// ChangeComplementaryColor();
 			// ChangeShade();
 		}
-		Debug.DrawRay(ray.origin, ray.direction, Color.red);
 	}
 	void ChangeNegaPosiColor(){ // ネガポジ反転
 
@@ -74,7 +65,7 @@ public class OutlineCharRay : MonoBehaviour
 		negaposiColor.g = (1.0f - pixelColor.g);
 		negaposiColor.b = (1.0f - pixelColor.b);
 
-		character.outlineColor = negaposiColor;
+		outline.OutlineColor = negaposiColor;
 	}
 	void ChangeComplementaryColor(){ // 補色の計算
 
@@ -94,7 +85,7 @@ public class OutlineCharRay : MonoBehaviour
 		compColor.g = (rgbMaxMin - pixelColor.g);
 		compColor.b = (rgbMaxMin - pixelColor.b);
 
-		character.outlineColor = compColor;
+		outline.OutlineColor = compColor;
 	}
 	void ChangeShade(){ // 同系統の色の薄い色/濃い色に変換
 
@@ -109,6 +100,6 @@ public class OutlineCharRay : MonoBehaviour
 			
 			shadeColor = new Color(pixelColor.r + 0.5f, pixelColor.g + 0.5f, pixelColor.b +0.5f);
 		}
-		character.outlineColor = shadeColor;
+		outline.OutlineColor = shadeColor;
 	}
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6854943831945070023}
   - component: {fileID: 6854943831945070020}
   - component: {fileID: 4031195544178874873}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: AredPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,4 +198,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2577929ca6bceab4080cebb15896dd44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camObject: {fileID: 0}
