@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OutlineObjectRay : MonoBehaviour
 {
-    Outline outline; // 輪郭
+  Outline outline; // 輪郭
 	Color pixelColor; // 射影の中心のピクセル色
 	float pixelX; // 射影の中心のピクセル座標（x）
 	float pixelY; // 射影の中心のピクセル座標（y）
@@ -43,9 +43,9 @@ public class OutlineObjectRay : MonoBehaviour
 	{
 		myTransform = this.transform;
 
-		var direction = myTransform.position - camObject.transform.position;
+		var direction = myTransform.position - camObject.transform.position; // Cameraから見たこのオブジェクトの方向
 
-		ray = new Ray(camObject.transform.position, direction);
+		ray = new Ray(camObject.transform.position, direction); // CameraからこのオブジェクトへのRay
 		if(Physics.Raycast(ray, out hit, mask)){
 			hitWorld = hit.point; // hitのワールド座標
 			hitLocal = camObject.transform.InverseTransformPoint(hitWorld); // hitのローカル座標

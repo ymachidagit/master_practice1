@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class SetCamView : MonoBehaviour
 {
-	// int width = 1200;
-	// int height = 720;
-	// int fps = 60;
 	public WebCamTexture webcamTexture;
 	public GameObject camViewObject; // CamViewのGameObject
 	public Transform camViewTransform; // CamViewのTransform
