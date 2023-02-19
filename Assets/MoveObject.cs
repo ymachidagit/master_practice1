@@ -5,6 +5,7 @@ using UnityEngine;
 public class MoveObject : MonoBehaviour
 {
 	private float speed = 0.8f;
+	private float rotateSpeed = 0.5f;
 
 	void Update()
 	{
@@ -30,5 +31,11 @@ public class MoveObject : MonoBehaviour
 
 		if (Input.GetKey (KeyCode.DownArrow)) 
 			transform.position -= transform.forward * speed * Time.deltaTime;
+
+		if (Input.GetKey (KeyCode.RightArrow)) 
+			transform.Rotate(0.0f, rotateSpeed, 0.0f);
+
+		if (Input.GetKey (KeyCode.LeftArrow)) 
+			transform.Rotate(0.0f, -rotateSpeed, 0.0f);
 	}
 }
