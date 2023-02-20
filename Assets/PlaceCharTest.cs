@@ -26,7 +26,8 @@ public class PlaceCharTest : MonoBehaviour
 	float rangeY = 1.6f; // オブジェクトの配置範囲（y座標）
 	void Start()
 	{
-		camObject = GameObject.Find("Main Camera");
+		camObject = GameObject.Find("Camera");
+		// camObject = GameObject.Find("Main Camera");
 		camTransform = camObject.GetComponent<Transform>();
 
 		angleDiff = rangeAngle / (float)(searchObjects.GetLength(1) - 1);

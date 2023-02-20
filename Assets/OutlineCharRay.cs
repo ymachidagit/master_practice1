@@ -46,8 +46,8 @@ public class OutlineCharRay : MonoBehaviour
 		camViewScaleW = setCamViewScript.camViewScaleW;
 		camViewScaleH = setCamViewScript.camViewScaleH;
 
-		// camObject = GameObject.Find("Camera");
-		camObject = Camera.main.gameObject; // TestScene用
+		camObject = GameObject.Find("Camera");
+		// camObject = Camera.main.gameObject; // TestScene用
 	}
 	void Update()
 	{

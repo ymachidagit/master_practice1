@@ -50,6 +50,18 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/myTrackPad",
+      "type": "vector2"
+    },
+    {
+      "name": "/actions/default/in/myTrackPadPress",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/default/in/myTriggerPress",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
