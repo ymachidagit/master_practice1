@@ -31,7 +31,8 @@ public class PlaceObjectsTest : MonoBehaviour
   GameObject answerObject; // 正解のオブジェクト
   int answerI; // 正解のオブジェクトの行
   int answerJ; // 正解のオブジェクトの列
-
+  float taskTime; // 経過時間
+  bool timeFlag; // 時間計測用フラグ
   void Start()
   {
     // カメラオブジェクトを取得
@@ -124,6 +125,9 @@ public class PlaceObjectsTest : MonoBehaviour
   }
   void Update()
   {
+    if(Input.GetKey(KeyCode.Space)) StartTask();
+    if(timeFlag) taskTime += Time.deltaTime; // タスク時間の計測
+
     if (Input.GetKey(KeyCode.R)) ResetPlace(); // Rキーを押した時にプレハブを配置
 
     // Viveコントローラの入力を取得
@@ -174,7 +178,7 @@ public class PlaceObjectsTest : MonoBehaviour
     // to do 正解オブジェクトを選択した状態でトリガーを引いた時にタスクを終了
     if(squeezeRight > 0.8)
     {
-      if(iSelect == answerI && jSelect == answerJ) Debug.Log("END");
+      if(iSelect == answerI && jSelect == answerJ) FinishTask();
     }
   }
   void ResetPlace()
@@ -207,5 +211,15 @@ public class PlaceObjectsTest : MonoBehaviour
       list[i] = list[randomIndex];
       list[randomIndex] = temp;
     }
+  }
+  void StartTask()
+  {
+    taskTime = 0;
+    timeFlag = true;
+  }
+  void FinishTask()
+  {
+    timeFlag = false;
+    Debug.Log("タスク完了時間：" + taskTime);
   }
 }
