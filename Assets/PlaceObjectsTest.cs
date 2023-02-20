@@ -32,6 +32,7 @@ public class PlaceObjectsTest : MonoBehaviour
     angleDiff = rangeAngle / (float)(searchObjects.GetLength(1) - 1);
     distanceY = rangeY / (float)(searchObjects.GetLength(0) - 1);
 
+    // assetからプレハブのアタッチ
     // to doランダムに正解のオブジェクトを決定
     // プレハブを格納 to do 一つだけ正解のプレハブを入れる
     for (int i = 0; i < searchObjects.GetLength(0); i++)
