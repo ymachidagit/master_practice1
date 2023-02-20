@@ -32,6 +32,7 @@ public class PlaceObjectsTest : MonoBehaviour
     angleDiff = rangeAngle / (float)(searchObjects.GetLength(1) - 1);
     distanceY = rangeY / (float)(searchObjects.GetLength(0) - 1);
 
+    // to doランダムに正解のオブジェクトを決定
     // プレハブを格納 to do 一つだけ正解のプレハブを入れる
     for (int i = 0; i < searchObjects.GetLength(0); i++)
     {
@@ -44,8 +45,8 @@ public class PlaceObjectsTest : MonoBehaviour
         }
         else if (i == 1)
         {
-          if (j % 2 == 0) searchObjects[i, j] = SpherePrefab;
-          else searchObjects[i, j] = CubePrefab;
+          if (j % 2 == 0) searchObjects[i, j] = CylinderPrefab;
+          else searchObjects[i, j] = ConePrefab;
         }
         else if (i == 2)
         {
@@ -109,6 +110,7 @@ public class PlaceObjectsTest : MonoBehaviour
         searchObjects[i, j].transform.localPosition = new Vector3(radius * Mathf.Cos(angleRad), positionY, radius * Mathf.Sin(angleRad)); // プレハブの配置
         searchObjects[i, j].transform.rotation = camTransform.rotation; // プレハブの回転をCameraに合わせる
         searchObjects[i, j].transform.Rotate(0.0f, -angle, 0.0f); // プレハブがCameraに対して正面を向くように回転
+        if (searchObjects[i, j].name.Contains("Cone")) searchObjects[i, j].transform.Rotate(-90f, 0.0f, 0.0f); //Coneの向き調整
       }
     }
   }

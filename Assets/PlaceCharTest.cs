@@ -13,7 +13,7 @@ public class PlaceCharTest : MonoBehaviour
   Color colorBlue = Color.blue;
   Color colorGreen = Color.green;
   Color colorYellow = Color.yellow;
-  Color colorPurple = new Color(1, 0, 1, 1);TextMeshPro[,] searchObjects = new TextMeshPro[5, 10]; // 5行10列
+  Color colorPurple = new Color(1, 0, 1, 1);TextMeshPro[,] searchObjects = new TextMeshPro[4, 10]; // 5行10列
 	GameObject camObject;
 	Transform camTransform;
 	float angleDiff; // オブジェクト間の角度差（y軸周り．横方向）
