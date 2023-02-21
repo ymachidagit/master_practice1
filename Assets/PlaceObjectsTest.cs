@@ -4,15 +4,18 @@ using UnityEngine;
 using UnityEditor;
 public class PlaceObjectsTest : MonoBehaviour
 {
-  Color colorRed = Color.red;
-  Color colorBlue = Color.blue;
-  GameObject[,] searchObjects = new GameObject[3, 14]; // 5行10列
+  Color color1 = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+  Color color2 = new Color(0.0f, 0.0f, 1.0f, 1.0f);
+  const int objectsRow = 5;
+  const int objectsColumn = 10;
+  GameObject[,] searchObjects = new GameObject[objectsRow, objectsColumn]; // 3行14列
   GameObject camObject;
   Transform camTransform;
   float angleDiff; // オブジェクト間の角度差（y軸周り．横方向）
   float angle; // オブジェクトの配置角度（Degree）
+  float angle0; // 右端のオブジェクトの角度（Degree）
   float angleRad; // オブジェクトの配置角度（Radian）
-  float rangeAngle = 150f; // オブジェクト配置範囲（角度）
+  float rangeAngle = 120f; // オブジェクト配置範囲（角度）
   float radius = 1.0f; // カメラと探索オブジェクトの距離（半径）
   float distanceY; // オブジェクト間の距離（y軸方向．縦方向）
   float positionY; // オブジェクトの配置座標（y）
@@ -33,6 +36,9 @@ public class PlaceObjectsTest : MonoBehaviour
   int answerJ; // 正解のオブジェクトの列
   float taskTime; // 経過時間
   bool timeFlag; // 時間計測用フラグ
+  [SerializeField] bool isOutline; // outlineを付けるか
+  string[] guids_prefab;
+  string[] guids_answer_prefab;
   void Start()
   {
     // カメラオブジェクトを取得
@@ -41,30 +47,42 @@ public class PlaceObjectsTest : MonoBehaviour
     camTransform = camObject.GetComponent<Transform>();
 
     // オブジェクト同士の角度差と距離を算出
-    angleDiff = rangeAngle / (float)(searchObjects.GetLength(1) - 1);
-    distanceY = rangeY / (float)(searchObjects.GetLength(0) - 1);
+    angle0 = (180 - rangeAngle) / 2;
+    angleDiff = rangeAngle / (float)(objectsColumn - 1);
+    distanceY = rangeY / (float)(objectsRow - 1);
 
-    // 正解オブジェクトの生成
-    answerNum = Random.Range(0, 8); // 0~7
-    var guids_answer_prefab = AssetDatabase.FindAssets("t:prefab", new string[] {"Assets/Prefabs/AnswerObjectPrefabs"});
-    string path_answer_prefab = AssetDatabase.GUIDToAssetPath(guids_answer_prefab[answerNum]);
-    answerObject = AssetDatabase.LoadAssetAtPath<GameObject>(path_answer_prefab);
-    answerObject = Instantiate(answerObject, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
-    if(answerObject.name.Contains("Color1")) answerObject.GetComponent<Renderer>().material.color = colorRed;
-    else answerObject.GetComponent<Renderer>().material.color = colorBlue;
+    // 枠線あり/なしに応じてアタッチするプレハブを変える
+    if(isOutline)
+    {
+      guids_prefab = AssetDatabase.FindAssets("t:prefab", new string[] {"Assets/Prefabs/6x10Object"});
+      guids_answer_prefab = AssetDatabase.FindAssets("t:prefab", new string[] {"Assets/Prefabs/6x1AnswerObject"});
+    }
+    else
+    {
+      guids_prefab = AssetDatabase.FindAssets("t:prefab", new string[] {"Assets/Prefabs/6x10ObjectNo"});
+      guids_answer_prefab = AssetDatabase.FindAssets("t:prefab", new string[] {"Assets/Prefabs/6x1AnswerObjectNo"});
+    }
 
-    // assetからプレハブのアタッチ
-    var guids_prefab = AssetDatabase.FindAssets("t:prefab", new string[] {"Assets/Prefabs/ObjectPrefabs"});
-    // preloadPrefabs = new GameObject[guids_prefab.Length - 6];
     var preloadPrefabs = new List<GameObject>();
 
-    for(int i = 0 ; i < 8 ; i++)
+    answerNum = Random.Range(0, 6); // 0~5
+    string path_answer_prefab = AssetDatabase.GUIDToAssetPath(guids_answer_prefab[answerNum]);
+    answerObject = AssetDatabase.LoadAssetAtPath<GameObject>(path_answer_prefab);
+
+    // 正解オブジェクトの生成
+    this.transform.position = camObject.transform.position;
+    this.transform.rotation = camObject.transform.rotation;
+    answerObject = Instantiate(answerObject, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+    if(answerObject.name.Contains("Color1")) answerObject.GetComponent<Renderer>().material.color = color1;
+    else answerObject.GetComponent<Renderer>().material.color = color2;
+
+    for(int i = 0 ; i < 6 ; i++)
     {
       if(i != answerNum)
       {
-        for(int j = 0 ; j < 6 ; j++)
+        for(int j = 0 ; j < 10 ; j++)
         {
-          string path_prefab = AssetDatabase.GUIDToAssetPath(guids_prefab[i * 6 + j]);
+          string path_prefab = AssetDatabase.GUIDToAssetPath(guids_prefab[i * 10 + j]);
           preloadPrefabs.Add(AssetDatabase.LoadAssetAtPath<GameObject>(path_prefab));
         }
       }
@@ -74,9 +92,9 @@ public class PlaceObjectsTest : MonoBehaviour
     ShuffleObjects(preloadPrefabs);
 
     // preloadPrefabsのオブジェクトをsearchObjectsに移動
-    for(int i = 0 ; i < 3 ; i++)
+    for(int i = 0 ; i < objectsRow ; i++)
     {
-      for(int j = 0 ; j < 14 ; j++)
+      for(int j = 0 ; j < objectsColumn ; j++)
       {
         searchObjects[i, j] = preloadPrefabs[loopCount];
         loopCount += 1;
@@ -84,13 +102,13 @@ public class PlaceObjectsTest : MonoBehaviour
     }
 
     // 正解オブジェクトの行と列
-    answerI = Random.Range(0, searchObjects.GetLength(0));
-    answerJ = Random.Range(0, searchObjects.GetLength(1));
+    answerI = Random.Range(0, objectsRow);
+    answerJ = Random.Range(0, objectsColumn);
 
     // 一度プレハブを生成（GetComponentで色変更するため）
-    for (int i = 0; i < searchObjects.GetLength(0); i++)
+    for (int i = 0; i < objectsRow; i++)
     {
-      for (int j = 0; j < searchObjects.GetLength(1); j++)
+      for (int j = 0; j < objectsColumn; j++)
       {
         if(i == answerI && j == answerJ) searchObjects[i, j] = answerObject;
         else searchObjects[i, j] = Instantiate(searchObjects[i, j], new Vector3(0, 0, 0), Quaternion.identity, this.transform);
@@ -98,27 +116,25 @@ public class PlaceObjectsTest : MonoBehaviour
     }
 
     // プレハブの色変更
-    for (int i = 0; i < searchObjects.GetLength(0); i++)
+    for (int i = 0; i < objectsRow; i++)
     {
-      for (int j = 0; j < searchObjects.GetLength(1); j++)
+      for (int j = 0; j < objectsColumn; j++)
       {
         if(!(i == answerI && j == answerJ))
         {
-          if(searchObjects[i, j].name.Contains("Color1")) searchObjects[i, j].GetComponent<Renderer>().material.color = colorRed;
-          else searchObjects[i, j].GetComponent<Renderer>().material.color = colorBlue;
+          if(searchObjects[i, j].name.Contains("Color1")) searchObjects[i, j].GetComponent<Renderer>().material.color = color1;
+          else searchObjects[i, j].GetComponent<Renderer>().material.color = color2;
         }
       }
     }
-
-    ResetPlace(); // 配置
 
     // コントローラ関連のスクリプトを取得
     cameraRigObject = GameObject.Find("[CameraRig]");
 		inputControllerScript = cameraRigObject.GetComponent<InputController>();
 
     // 選択オブジェクトの初期位置設定
-    iSelect = 2;
-    jSelect = 7;
+    iSelect = 3;
+    jSelect = 5;
     selectCube = GameObject.Find("SelectCube");
     selectCube.transform.position = searchObjects[iSelect, jSelect].transform.position;
     selectCube.transform.rotation = searchObjects[iSelect, jSelect].transform.rotation;
@@ -129,6 +145,7 @@ public class PlaceObjectsTest : MonoBehaviour
     if(timeFlag) taskTime += Time.deltaTime; // タスク時間の計測
 
     if (Input.GetKey(KeyCode.R)) ResetPlace(); // Rキーを押した時にプレハブを配置
+    if(Input.GetKey(KeyCode.RightShift)) ShowAnswer(); // Aキーを押したときに正解オブジェクトを提示
 
     // Viveコントローラの入力を取得
     posRight = inputControllerScript.posRight;
@@ -143,7 +160,7 @@ public class PlaceObjectsTest : MonoBehaviour
         if(posRight.y > 0)
         {
           Debug.Log("上");
-          if(iSelect == searchObjects.GetLength(0) - 1) iSelect = searchObjects.GetLength(0) - 1;
+          if(iSelect == objectsRow - 1) iSelect = objectsRow - 1;
           else iSelect += 1;
         }
         else
@@ -164,7 +181,7 @@ public class PlaceObjectsTest : MonoBehaviour
         else
         {
           Debug.Log("左");
-          if(jSelect == searchObjects.GetLength(1) - 1) jSelect = searchObjects.GetLength(0) - 1;
+          if(jSelect == objectsColumn - 1) jSelect = objectsColumn - 1;
           else jSelect += 1;
         }
       }
@@ -175,7 +192,7 @@ public class PlaceObjectsTest : MonoBehaviour
     selectCube.transform.position = searchObjects[iSelect, jSelect].transform.position;
     selectCube.transform.rotation = searchObjects[iSelect, jSelect].transform.rotation;
 
-    // to do 正解オブジェクトを選択した状態でトリガーを引いた時にタスクを終了
+    // 正解オブジェクトを選択した状態でトリガーを引いた時にタスクを終了
     if(squeezeRight > 0.8)
     {
       if(iSelect == answerI && jSelect == answerJ) FinishTask();
@@ -185,19 +202,37 @@ public class PlaceObjectsTest : MonoBehaviour
   { // オブジェクトを現在のカメラ位置に合わせて再配置
     this.transform.position = camTransform.position; // SearchObjectsの座標をCameraの座標に
     this.transform.rotation = camTransform.rotation; // SearchObjectsの回転をCameraの回転に
-    for (int i = 0; i < searchObjects.GetLength(0); i++)
+    for (int i = 0; i < objectsRow; i++)
     {
-      for (int j = 0; j < searchObjects.GetLength(1); j++)
+      for (int j = 0; j < objectsColumn; j++)
       {
-        angle = (angleDiff * j); // このプレハブの回転角度（Degree）
+        angle = (angleDiff * j) + angle0; // このプレハブの回転角度（Degree）
         angleRad = angle * Mathf.Deg2Rad; // このプレハブの回転角度（Radian）
         positionY = distanceY * i - rangeY / 2; // このプレハブのy座標
         searchObjects[i, j].transform.localPosition = new Vector3(radius * Mathf.Cos(angleRad), positionY, radius * Mathf.Sin(angleRad)); // プレハブの配置
         searchObjects[i, j].transform.rotation = camTransform.rotation; // プレハブの回転をCameraに合わせる
         searchObjects[i, j].transform.Rotate(0.0f, -angle, 0.0f); // プレハブがCameraに対して正面を向くように回転
+        if (searchObjects[i, j].name.Contains("Cone")) searchObjects[i, j].transform.localPosition -= new Vector3(0.0f, 0.05f, 0.0f); //Coneの高さ
         if (searchObjects[i, j].name.Contains("Cone")) searchObjects[i, j].transform.Rotate(-90f, 0.0f, 0.0f); //Coneの向き調整
       }
     }
+  }
+  void ShowAnswer()
+  {
+    this.transform.position = camTransform.position; // SearchObjectsの座標をCameraの座標に
+    this.transform.rotation = camTransform.rotation; // SearchObjectsの回転をCameraの回転に
+    for (int i = 0; i < objectsRow; i++)
+    {
+      for (int j = 0; j < objectsColumn; j++)
+      {
+        if(!(i == answerI && j == answerJ)) searchObjects[i, j].transform.localPosition = new Vector3(radius * Mathf.Cos(270*Mathf.Deg2Rad), 0, radius * Mathf.Sin(270*Mathf.Deg2Rad));
+      }
+    }
+    answerObject.transform.localPosition = new Vector3(radius * Mathf.Cos(90*Mathf.Deg2Rad), positionY, radius * Mathf.Sin(90*Mathf.Deg2Rad)); // プレハブの配置
+    answerObject.transform.rotation = camTransform.rotation; // プレハブの回転をCameraに合わせる
+    answerObject.transform.Rotate(0.0f, -90, 0.0f); // プレハブがCameraに対して正面を向くように回転
+    if (answerObject.name.Contains("Cone")) answerObject.transform.Rotate(-90f, 0.0f, 0.0f); //Coneの向き調整
+
   }
   void ShuffleObjects(List<GameObject> list)
   { // リストに格納したオブジェクトをシャッフル
@@ -216,10 +251,12 @@ public class PlaceObjectsTest : MonoBehaviour
   {
     taskTime = 0;
     timeFlag = true;
+    ResetPlace();
   }
   void FinishTask()
   {
     timeFlag = false;
     Debug.Log("タスク完了時間：" + taskTime);
+    UnityEditor.EditorApplication.isPlaying = false;
   }
 }
