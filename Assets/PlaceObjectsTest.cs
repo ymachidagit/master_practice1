@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEditor;
 public class PlaceObjectsTest : MonoBehaviour
 {
-  Color color1 = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-  Color color2 = new Color(0.0f, 0.0f, 1.0f, 1.0f);
+  Color color1 = new Color(100f/255f, 30f/255f, 30f/255f, 1.0f);
+  Color color2 = new Color(50f/255f, 50f/255f, 255f/255f, 1.0f);
   const int objectsRow = 5;
   const int objectsColumn = 10;
-  GameObject[,] searchObjects = new GameObject[objectsRow, objectsColumn]; // 3行14列
+  GameObject[,] searchObjects = new GameObject[objectsRow, objectsColumn]; // 探索対象のオブジェクト
   GameObject camObject;
   Transform camTransform;
   float angleDiff; // オブジェクト間の角度差（y軸周り．横方向）
@@ -19,7 +19,7 @@ public class PlaceObjectsTest : MonoBehaviour
   float radius = 1.0f; // カメラと探索オブジェクトの距離（半径）
   float distanceY; // オブジェクト間の距離（y軸方向．縦方向）
   float positionY; // オブジェクトの配置座標（y）
-  float rangeY = 0.9f; // オブジェクトの配置範囲（y座標）
+  float rangeY = 0.8f; // オブジェクトの配置範囲（y座標）
   GameObject cameraRigObject;
   InputController inputControllerScript;
   Vector2 posRight; // トラックパッド上のタッチしている座標
@@ -72,9 +72,10 @@ public class PlaceObjectsTest : MonoBehaviour
     // 正解オブジェクトの生成
     this.transform.position = camObject.transform.position;
     this.transform.rotation = camObject.transform.rotation;
-    answerObject = Instantiate(answerObject, new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+    answerObject = Instantiate(answerObject, new Vector3(0, -5, -5), Quaternion.identity, this.transform);
     if(answerObject.name.Contains("Color1")) answerObject.GetComponent<Renderer>().material.color = color1;
     else answerObject.GetComponent<Renderer>().material.color = color2;
+    Debug.Log("正解オブジェクト" + answerObject);
 
     for(int i = 0 ; i < 6 ; i++)
     {
@@ -111,7 +112,7 @@ public class PlaceObjectsTest : MonoBehaviour
       for (int j = 0; j < objectsColumn; j++)
       {
         if(i == answerI && j == answerJ) searchObjects[i, j] = answerObject;
-        else searchObjects[i, j] = Instantiate(searchObjects[i, j], new Vector3(0, 0, 0), Quaternion.identity, this.transform);
+        else searchObjects[i, j] = Instantiate(searchObjects[i, j], new Vector3(0, -5, -5), Quaternion.identity, this.transform);
       }
     }
 
@@ -158,14 +159,12 @@ public class PlaceObjectsTest : MonoBehaviour
       if(posRight.y / posRight.x > 1 || posRight.y / posRight.x < -1)
       {
         if(posRight.y > 0)
-        {
-          Debug.Log("上");
+        { // 上
           if(iSelect == objectsRow - 1) iSelect = objectsRow - 1;
           else iSelect += 1;
         }
         else
-        {
-          Debug.Log("下");
+        { // 下
           if(iSelect == 0) iSelect = 0;
           else iSelect -= 1;
         }
@@ -173,14 +172,12 @@ public class PlaceObjectsTest : MonoBehaviour
       else
       {
         if(posRight.x > 0)
-        {
-          Debug.Log("右");
+        { // 右
           if(jSelect == 0) jSelect = 0;
           else jSelect -= 1;
         }
         else
-        {
-          Debug.Log("左");
+        { // 左
           if(jSelect == objectsColumn - 1) jSelect = objectsColumn - 1;
           else jSelect += 1;
         }

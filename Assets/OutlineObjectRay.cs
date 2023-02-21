@@ -36,7 +36,7 @@ public class OutlineObjectRay : MonoBehaviour
 	{
 		outline = gameObject.AddComponent<Outline>();
 		outline.OutlineMode = Outline.Mode.OutlineAll;
-		outline.OutlineWidth = 5f; // 輪郭の幅
+		outline.OutlineWidth = 10f; // 輪郭の幅
 
 		camViewObject = GameObject.Find("CamView");
 		setCamViewScript = camViewObject.GetComponent<SetCamView>();
@@ -103,7 +103,7 @@ public class OutlineObjectRay : MonoBehaviour
 		negaposiColor.r *= 1.0f / rgbMax;
 		negaposiColor.g *= 1.0f / rgbMax;
 		negaposiColor.b *= 1.0f / rgbMax;
-		
+
 		outline.OutlineColor = negaposiColor;
 	}
 	void ChangeComplementaryColor()
