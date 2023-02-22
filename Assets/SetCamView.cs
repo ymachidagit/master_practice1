@@ -16,7 +16,7 @@ public class SetCamView : MonoBehaviour
 	{
 		WebCamDevice[] devices = WebCamTexture.devices;
 		for(int i = 0 ; i < devices.Length ; i++){
-			Debug.Log("デバイス:" + devices[i]);
+			// Debug.Log("デバイス:" + devices[i]);
 		}
 		webcamTexture = new WebCamTexture(devices[0].name);
 		GetComponent<Renderer> ().material.mainTexture = webcamTexture;
@@ -29,11 +29,11 @@ public class SetCamView : MonoBehaviour
 		camViewPxW = webcamTexture.width; // CamViewのピクセル（幅）取得
 		camViewPxH = webcamTexture.height; // CamViewのピクセル（高さ）取得
 
-		Debug.Log("camViewPos:" + camViewPos);
-		Debug.Log("camViewScaleW:" + camViewScaleW);
-		Debug.Log("camViewScaleH:" + camViewScaleH);
-		Debug.Log("camViewPxW:" + camViewPxW);
-		Debug.Log("camViewPxH:" + camViewPxH);
+		// Debug.Log("camViewPos:" + camViewPos);
+		// Debug.Log("camViewScaleW:" + camViewScaleW);
+		// Debug.Log("camViewScaleH:" + camViewScaleH);
+		// Debug.Log("camViewPxW:" + camViewPxW);
+		// Debug.Log("camViewPxH:" + camViewPxH);
 	}
 	void Update()
 	{

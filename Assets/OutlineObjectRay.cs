@@ -78,7 +78,6 @@ public class OutlineObjectRay : MonoBehaviour
 			{
 				if(((pixelR + pixelG + pixelB)/3) >= BLACKWHITE) outline.OutlineColor = new Color(0.0f, 0.0f, 0.0f, 1.0f); // 白なら枠線を黒に
 				else outline.OutlineColor = new Color(1.0f, 1.0f, 1.0f, 1.0f); // 黒なら枠線を白に
-				return;
 			}
 			else
 			{
@@ -135,15 +134,8 @@ public class OutlineObjectRay : MonoBehaviour
 
 		float rgbTotal = pixelColor.r + pixelColor.g + pixelColor.b;
 
-		if (rgbTotal >= 1.5)
-		{
-			shadeColor = new Color(pixelColor.r - 0.5f, pixelColor.g - 0.5f, pixelColor.b - 0.5f);
-		}
-		else
-		{
-
-			shadeColor = new Color(pixelColor.r + 0.5f, pixelColor.g + 0.5f, pixelColor.b + 0.5f);
-		}
+		if (rgbTotal >= 1.5) shadeColor = new Color(pixelColor.r - 0.5f, pixelColor.g - 0.5f, pixelColor.b - 0.5f);
+		else shadeColor = new Color(pixelColor.r + 0.5f, pixelColor.g + 0.5f, pixelColor.b + 0.5f);
 		outline.OutlineColor = shadeColor;
 	}
 }
