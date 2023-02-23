@@ -123,7 +123,27 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!43 &44756470
+--- !u!1 &94273407 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+  m_PrefabInstance: {fileID: 1474170597}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &94273412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94273407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 623c186226e014c43932cd5803a14e5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  posRight: {x: 0, y: 0}
+  isPressedRight: 0
+  squeezeRight: 0
+--- !u!43 &346574431
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,26 +307,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &94273407 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 146900, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-  m_PrefabInstance: {fileID: 1474170597}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &94273412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94273407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 623c186226e014c43932cd5803a14e5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  posRight: {x: 0, y: 0}
-  isPressedRight: 0
-  squeezeRight: 0
 --- !u!1001 &614655383
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -523,11 +523,11 @@ PrefabInstance:
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 1977665163}
+      objectReference: {fileID: 2118331763}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 44756470}
+      objectReference: {fileID: 346574431}
     - target: {fileID: 20000014031267948, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
       propertyPath: m_TargetEye
       value: 3
@@ -1095,7 +1095,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943478754}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &1977665163
+--- !u!4 &2034439581 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4000013889601590, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
+  m_PrefabInstance: {fileID: 1474170597}
+  m_PrefabAsset: {fileID: 0}
+--- !u!21 &2118331763
 Material:
   serializedVersion: 8
   m_ObjectHideFlags: 0
@@ -1132,8 +1137,3 @@ Material:
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
---- !u!4 &2034439581 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4000013889601590, guid: 4d293c8e162f3874b982baadd71153d2, type: 3}
-  m_PrefabInstance: {fileID: 1474170597}
-  m_PrefabAsset: {fileID: 0}

@@ -6,8 +6,8 @@ using System.IO;
 using System.Text;
 public class PlaceObjectsTest : MonoBehaviour
 {
-  Color color1 = new Color(100f / 255f, 30f / 255f, 30f / 255f, 1.0f);
-  Color color2 = new Color(50f / 255f, 50f / 255f, 255f / 255f, 1.0f);
+  Color color1 = new Color(120f / 255f, 30f / 255f, 30f / 255f, 1.0f);
+  Color color2 = new Color(50f / 255f, 50f / 255f, 200f / 255f, 1.0f);
   const int objectsRow = 5;
   const int objectsColumn = 10;
   GameObject[,] searchObjects = new GameObject[objectsRow, objectsColumn]; // 探索対象のオブジェクト
@@ -51,8 +51,8 @@ public class PlaceObjectsTest : MonoBehaviour
   string csvFilePath; // csvファイルのパス
   void Start()
   {
-    condition = "なし"; // 実験条件（ネガポジ or 補色 or なし）
-    csvFilePath = @"C:\Users\human\Desktop\person2.csv";
+    condition = "ネガポジ"; // 実験条件（ネガポジ or 補色 or なし）
+    csvFilePath = @"C:\Users\human\Desktop\person0.csv";
 
     camObject = GameObject.Find("Camera"); // カメラオブジェクトの取得
     // camObject = GameObject.Find("Main Camera");
@@ -118,7 +118,7 @@ public class PlaceObjectsTest : MonoBehaviour
       selectCube.transform.position = searchObjects[iSelect, jSelect].transform.position;
       selectCube.transform.rotation = searchObjects[iSelect, jSelect].transform.rotation;
     }
-    else selectCube.transform.position = new Vector3(0, -5, -5); // タスク中以外はカメラから見えない位置に表示
+    else selectCube.transform.localPosition = new Vector3(0, -5, -5); // タスク中以外はカメラから見えない位置に表示
 
     // Rキーを押した時にプレハブを再配置
     if (Input.GetKey(KeyCode.R) && !rPressFlag)
@@ -257,11 +257,11 @@ public class PlaceObjectsTest : MonoBehaviour
   {
     var preloadPrefabs = new List<GameObject>();
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 6; i++) // オブジェクトの種類（形3×色2）
     {
       if (i != answerNum) // 正解オブジェクトと同型，同色のもの以外を格納
       {
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 10; j++) // 各オブジェクトの個数（同じ形色のオブジェクトの個数）
         {
           string path_prefab = AssetDatabase.GUIDToAssetPath(guids_prefab[i * 10 + j]);
           preloadPrefabs.Add(AssetDatabase.LoadAssetAtPath<GameObject>(path_prefab));
