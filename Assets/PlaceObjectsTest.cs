@@ -51,8 +51,8 @@ public class PlaceObjectsTest : MonoBehaviour
   string csvFilePath; // csvファイルのパス
   void Start()
   {
-    condition = "ネガポジ"; // 実験条件（ネガポジ or 補色 or なし）
-    csvFilePath = @"C:\Users\human\Desktop\person0.csv";
+    condition = "補色"; // 実験条件（ネガポジ or 補色 or なし）
+    csvFilePath = @"C:\Users\human\Desktop\person7.csv";
 
     camObject = GameObject.Find("Camera"); // カメラオブジェクトの取得
     // camObject = GameObject.Find("Main Camera");

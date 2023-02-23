@@ -82,8 +82,8 @@ public class OutlineObjectRay : MonoBehaviour
 			else
 			{
 				// outline.OutlineColor = pixelColor;
-				ChangeNegaPosiColor();
-				// ChangeComplementaryColor();
+				// ChangeNegaPosiColor();
+				ChangeComplementaryColor();
 				// ChangeShade();
 			}
 		}
