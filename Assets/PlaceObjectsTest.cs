@@ -221,7 +221,7 @@ public class PlaceObjectsTest : MonoBehaviour
 
     // to do タスク時間と正解オブジェクトと条件をcsvに出力
     List<string> lines = new List<string>();
-    lines.Add(condition + "," + taskCount + "," + taskTime.ToString() + "," + answerObject.ToString());
+    lines.Add(condition + "," + taskCount + "," + taskTime + "," + answerI + "," + answerJ + "," + answerObject.ToString());
     
     File.AppendAllLines(csvFilePath, lines, Encoding.GetEncoding("shift-jis"));
 
