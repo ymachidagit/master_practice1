@@ -6,8 +6,10 @@ using System.IO;
 using System.Text;
 public class PlaceObjectsTest : MonoBehaviour
 {
-  Color color1 = new Color(120f / 255f, 30f / 255f, 30f / 255f, 1.0f);
-  Color color2 = new Color(50f / 255f, 50f / 255f, 200f / 255f, 1.0f);
+  // Color color1 = new Color(120f / 255f, 30f / 255f, 30f / 255f, 1.0f);
+  // Color color2 = new Color(50f / 255f, 50f / 255f, 200f / 255f, 1.0f);
+  Color color1 = new Color(200f / 255f, 30f / 255f, 30f / 255f, 1.0f);
+  Color color2 = new Color(30f / 255f, 30f / 255f, 200f / 255f, 1.0f);
   const int objectsRow = 5;
   const int objectsColumn = 10;
   GameObject[,] searchObjects = new GameObject[objectsRow, objectsColumn]; // 探索対象のオブジェクト
